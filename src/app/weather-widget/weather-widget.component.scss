@@ -1,18 +1,24 @@
 @import "../../variables";
 
-:host {
+@keyframes animate-entering {
+  0% { opacity: 0; transform: scale(0) translateY(100%); }
+  100% { opacity: 1; transform: scale(1) translateY(0%); }
+}
 
+:host {
   .weather-widget {
+    width: 100%;
     color: $foreground-color;
     background: #fff;
     box-shadow: 0 0 40px mix($foreground-color, white, 8%);
-    border-radius: 32px;
-    min-width: 320px;
-    max-width: 320px;
-    width: 100%;
+    overflow: hidden;
+    animation-duration: 0.5s;
+    animation-name: animate-entering;
+    animation-delay: 0.5s;
+    animation-fill-mode: backwards;
 
     &-current {
-      padding: 3rem 2rem;
+      padding: 48px 36px;
       width: 100%;
       box-sizing: border-box;
 
@@ -31,7 +37,7 @@
         display: flex;
       }
       &-date {
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 200;
         color: $muted-color;
       }
@@ -40,18 +46,13 @@
     &-intervals {
       display: flex;
       width: 100%;
-      overflow-x: hidden;
       box-sizing: border-box;
-      background: $primary-color;
-      border-radius: 0 0 32px 32px;
-      color: #fff;
       font-size: 12px;
       text-align: center;
 
       &-item {
-        min-width: 25%;
-        width: 25%;
-        padding: 16px 12px;
+        height: 160px;
+        padding: 24px 12px;
         box-sizing: border-box;
         opacity: 1;
         transition-duration: 300ms;
@@ -66,21 +67,26 @@
           opacity: .4;
 
           img {
-            filter: grayscale(100%);
+            filter: saturate(0%);
           }
         }
 
         &.active {
-          background: $accent-color !important;
+          background: #fff;
+          color: $foreground-color;
+          box-shadow: 0 0 20px mix($foreground-color, white, 5%);
+        }
+
+        &:hover:not(.active) {
+          background: rgba($primary-color, 0.05);
         }
 
         &:hover,
         &:active {
           opacity: 1 !important;
-          background: $primary-color;
 
           img {
-            filter: grayscale(0%) !important;
+            filter: saturate(100%) !important;
           }
         }
 

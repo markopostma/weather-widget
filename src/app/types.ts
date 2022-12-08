@@ -1,11 +1,14 @@
 import { WeatherCodesMap } from "./weather-widget/weather-codes-map";
 
+export type UnitType = 'metric' | 'imperial';
+
 export interface GetWeatherOptions {
   location: string;
-  units?: 'metric' | 'imperial';
+  units?: UnitType;
+  timezone?: string;
 }
 
-export interface TomorrowApiOptions extends GetWeatherOptions {
+export interface TomorrowApiOptions extends Required<GetWeatherOptions> {
   timesteps: string;
   fields: string[];
   startTime: string;

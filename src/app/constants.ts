@@ -1,4 +1,9 @@
-export const TOMORROW_API_KEY_PROVIDER = 'TOMORROW_API_KEY';
-export const TOMORROW_API_KEY = '';
+import { InjectionToken } from '@angular/core';
+import { UnitType } from './types';
+
+export const TOMORROW_API_KEY_PROVIDER = new InjectionToken<string>('TOMORROW_API_KEY');
+export const TOMORROW_API_KEY = '5bUljBzwJmDKrExlqPUpBUZlc3cr36LH';
 export const TOMORROW_API_URL = 'https://api.tomorrow.io/v4';
-export const LOCAL_STORAGE_KEY = 'WEATHER_WIDGET_CACHE';
+export const LOCAL_STORAGE_CACHE = 'WEATHER_WIDGET_CACHE';
+export const DEFAULT_UNIT: UnitType = 'metric';
+export const DEFAULT_TIMEZONE = 'Europe/Amsterdam';

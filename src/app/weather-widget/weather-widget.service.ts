@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { TOMORROW_API_KEY_PROVIDER, LOCAL_STORAGE_KEY, TOMORROW_API_URL } from '../constants';
+import { TOMORROW_API_KEY_PROVIDER, LOCAL_STORAGE_CACHE, TOMORROW_API_URL, DEFAULT_TIMEZONE, DEFAULT_UNIT } from '../constants';
 import { GetWeatherOptions, TimelinesResponse, TomorrowApiOptions, WeatherContext } from '../types';
 import { map, of, tap } from 'rxjs';
 
@@ -22,13 +22,18 @@ export class WeatherWidgetService {
     // due to rate limits of the API the data only needs to be updated once an hour.
     // using localstorage is not the most pretty solution, but it's suitable for the purpose of this project.
     // for production a self managed API would be recommened to manage caching.
-    const cacheStorage = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (localStorage) {
+      const cacheStorage = localStorage.getItem(LOCAL_STORAGE_CACHE);
 
-    if (cacheStorage) {
-      const cache = JSON.parse(cacheStorage) as WeatherContext[];
+      if (cacheStorage) {
+        const cache = JSON.parse(cacheStorage) as WeatherContext[];
 
-      if (Array.isArray(cache) && cache.length) {
-        this._cache = cache;
+        if (Array.isArray(cache) && cache.length === 24) {
+          this._cache = cache;
+        } else {
+          // the data is corrupted and should be cleared
+          localStorage.removeItem(LOCAL_STORAGE_CACHE);
+        }
       }
     }
   }
@@ -38,8 +43,8 @@ export class WeatherWidgetService {
    * @param apiOptions is required
    * @request GET /timelines
    */
-  getWeather(apiOptions: GetWeatherOptions) {
-    if (this._cache) {
+  getWeather(apiOptions: GetWeatherOptions, useCache = true) {
+    if (useCache && this._cache) {
       const cacheHours = new Date(this._cache[0].startTime).getHours();
 
       // if the hours are the same a refresh is not necessary, the result would be the same
@@ -49,9 +54,10 @@ export class WeatherWidgetService {
     }
 
     const options: TomorrowApiOptions = {
-      units: 'metric',
+      units: DEFAULT_UNIT,
+      timezone: DEFAULT_TIMEZONE,
       ...apiOptions,
-      startTime: new Date().toISOString(),
+      startTime: 'now',
       endTime: new Date().toISOString(),
       timesteps: '1h',
       fields: [
@@ -64,7 +70,8 @@ export class WeatherWidgetService {
     };
     const endTime = options.endTime ? new Date(options.endTime) : new Date();
 
-    // only fetch results for the next 24 hours
+    // set the time to 24 hours in the future, this will limit the size of the response
+    // due to the 'timesteps' being defined as '1h'.
     endTime.setHours(endTime.getHours() + 23);
 
     const params = new HttpParams({
@@ -89,7 +96,7 @@ export class WeatherWidgetService {
           .intervals
         ),
         tap(intervals => {
-          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(intervals, undefined, 0));
+          localStorage.setItem(LOCAL_STORAGE_CACHE, JSON.stringify(intervals, undefined, 0));
         })
       );
   }

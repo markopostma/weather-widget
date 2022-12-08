@@ -18,10 +18,7 @@ import { WeatherWidgetService } from "./app/weather-widget/weather-widget.servic
         provide: TOMORROW_API_KEY_PROVIDER,
         useValue: TOMORROW_API_KEY,
       },
-      {
-        provide: WeatherWidgetService,
-        deps: [TOMORROW_API_KEY_PROVIDER, HttpClient],
-      },
+      WeatherWidgetService
     ],
   });
 

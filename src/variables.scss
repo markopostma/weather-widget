@@ -1,4 +1,11 @@
 $primary-color: #3F37C9;
 $accent-color: #4361EE;
+$error-color: #B5179E;
 $foreground-color: #000411;
 $muted-color: #AEB7B3;
+
+$media-xl: unquote("only screen and (min-width: 1281px)");                      // Desktops
+$media-lg: unquote("only screen and (min-width: 1025px) and (max-width: 1280px)");  // Laptops, desktops
+$media-md: unquote("only screen and (min-width: 768px) and (max-width: 1024px)");   // Tablets, Ipads (portrait)
+$media-sm: unquote("only screen and (min-width: 481px) and (max-width: 767px)");    // Low resolution tablets
+$media-xs: unquote("only screen and (min-width: 320px) and (max-width: 480px)");    // Most smartphones

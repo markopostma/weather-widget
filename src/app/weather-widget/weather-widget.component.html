@@ -1,32 +1,35 @@
-<ng-template #widgetTemplate let-intervals="intervals">
-  <div class="weather-widget" *ngIf="intervals">
+<ng-template #widgetTemplate let-data="data">
+  <div #weatherWidget class="weather-widget" *ngIf="data">
     <div class="weather-widget-current">
       <div class="weather-widget-current-date">
-        {{intervals[activeInterval].startTime | date: 'MMMM d, y, h:mm a'}}
+        {{data[current].startTime | date: 'MMMM d, y, h:mm a'}}
       </div>
       <div class="weather-widget-current-description">
-        {{intervals[activeInterval].description}}
+        {{data[current].description}}
       </div>
       <div class="weather-widget-current-temperature">
-        <img [src]="intervals[activeInterval].icon" />
-        <span *ngIf="units == 'metric'">{{intervals[activeInterval].values.temperature | number: '1.0-0'}} °C</span>
-        <span *ngIf="units == 'imperial'">{{intervals[activeInterval].values.temperature | number: '1.0-0'}} °F</span>
+        <img [src]="data[current].icon" />
+        <span *ngIf="units == 'metric'">
+          {{data[current].values.temperature | number: '1.0-0'}} °C
+        </span>
+        <span *ngIf="units == 'imperial'">
+          {{data[current].values.temperature | number: '1.0-0'}} °F
+        </span>
       </div>
     </div>
     <div class="weather-widget-intervals">
       <div class="weather-widget-intervals-item"
-        #intervalItem
-        *ngFor="let interval of intervals; let i = index;"
-        (click)="activateInterval(i)"
-        [class.active]="activeInterval == i"
-        [style.marginLeft]="i == 0 ? calculateMarginLeft(intervalItem) : undefined">
-        <span>{{interval.startTime | date: 'h a'}}</span>
-        <img [src]="interval.icon" />
-        <span>{{interval.description}}</span>
+        *ngFor="let item of data; let i = index;"
+        (click)="handleItemClick(i)"
+        [class.active]="current == i"
+        [style.width]="100 / sliderItems + '%'"
+        [style.minWidth]="100 / sliderItems + '%'">
+        <b>{{item.startTime | date: 'h a'}}</b>
+        <img [src]="item.icon" />
+        <span>{{item.description}}</span>
       </div>
     </div>
   </div>
 </ng-template>
 
-<ng-container *ngTemplateOutlet="widgetTemplate; context: { intervals: intervals$ | async }">
-</ng-container>
+<ng-container *ngTemplateOutlet="widgetTemplate; context: { data: data$ | async }"></ng-container>
