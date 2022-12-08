@@ -1,6 +1,10 @@
 {
   "name": "weather-widget",
   "version": "0.0.0",
+  "author": {
+    "name": "Marko Postma"
+  },
+  "repository": "github.com/markopostma/weather-widget",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
