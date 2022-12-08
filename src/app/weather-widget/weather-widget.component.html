@@ -1,0 +1,32 @@
+<ng-template #widgetTemplate let-intervals="intervals">
+  <div class="weather-widget" *ngIf="intervals">
+    <div class="weather-widget-current">
+      <div class="weather-widget-current-date">
+        {{intervals[activeInterval].startTime | date: 'MMMM d, y, h:mm a'}}
+      </div>
+      <div class="weather-widget-current-description">
+        {{intervals[activeInterval].description}}
+      </div>
+      <div class="weather-widget-current-temperature">
+        <img [src]="intervals[activeInterval].icon" />
+        <span *ngIf="units == 'metric'">{{intervals[activeInterval].values.temperature | number: '1.0-0'}} °C</span>
+        <span *ngIf="units == 'imperial'">{{intervals[activeInterval].values.temperature | number: '1.0-0'}} °F</span>
+      </div>
+    </div>
+    <div class="weather-widget-intervals">
+      <div class="weather-widget-intervals-item"
+        #intervalItem
+        *ngFor="let interval of intervals; let i = index;"
+        (click)="activateInterval(i)"
+        [class.active]="activeInterval == i"
+        [style.marginLeft]="i == 0 ? calculateMarginLeft(intervalItem) : undefined">
+        <span>{{interval.startTime | date: 'h a'}}</span>
+        <img [src]="interval.icon" />
+        <span>{{interval.description}}</span>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-container *ngTemplateOutlet="widgetTemplate; context: { intervals: intervals$ | async }">
+</ng-container>

@@ -57,6 +57,9 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "demo": {
+              "outputPath": "demo"
             }
           },
           "defaultConfiguration": "production"
