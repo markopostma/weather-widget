@@ -68,24 +68,45 @@
     margin-bottom: 24px;
     box-sizing: border-box;
     padding: 0 24px;
-  }
+    display: flex;
+    align-items: center;
+    user-select: none;
 
-  &-timesteps {
-    background: #fff;
-    box-shadow: 0 0 16px mix($foreground-color, white, 8%);
-    height: 42px;
-    display: inline-block;
-    border-radius: 21px;
-    font-size: 13px;
-    font-weight: 500;
-
-    span {
-      padding: 0 24px;
-      box-sizing: border-box;
-      display: inline-block;
+    &-pagination {
+      background: #fff;
+      box-shadow: 0 0 16px mix($foreground-color, white, 8%);
       height: 42px;
-      line-height: 42px;
-      cursor: pointer;
+      display: inline-block;
+      border-radius: 21px;
+      font-weight: 500;
+
+      span {
+        font-size: 13px;
+      }
+
+      span,
+      a {
+        padding: 0 24px;
+        box-sizing: border-box;
+        display: inline-block;
+        height: 42px;
+        line-height: 42px;
+        cursor: pointer;
+        transition-duration: 100ms;
+      }
+
+      a {
+        padding: 0;
+        width: 42px;
+        text-align: center;
+        font-weight: 700;
+
+        &.disabled {
+          opacity: .25;
+          pointer-events: none;
+        }
+      }
+
     }
   }
 

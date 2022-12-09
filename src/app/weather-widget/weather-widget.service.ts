@@ -60,10 +60,10 @@ export class WeatherWidgetService {
       ...apiOptions,
       fields: [
         'temperature',
-        'cloudCover',
-        'windSpeed',
-        'windDirection',
         'weatherCode',
+        // 'cloudCover',
+        // 'windSpeed',
+        // 'windDirection',
       ]
     };
 

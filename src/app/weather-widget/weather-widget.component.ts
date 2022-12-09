@@ -28,6 +28,8 @@ export class WeatherWidgetComponent implements OnInit {
 
   private _activeInterval = 0;
   public hours$!: Observable<WeatherContext[] | unknown>;
+  public page = 0;
+  public perPage = 6;
 
   ngOnInit() {
     this.hours$ = this.weatherWidgetService.getTimelines({
@@ -56,5 +58,10 @@ export class WeatherWidgetComponent implements OnInit {
 
   itemClick(index: number) {
     this.current = index;
+  }
+
+  paginate(page: number) {
+    this.page = Math.max(0, Math.min(3, page));
+    this.current = this.page * this.perPage;
   }
 }
