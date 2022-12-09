@@ -1,18 +1,19 @@
-import { WeatherCodesMap } from "./weather-widget/weather-codes-map";
+import { WeatherCodesMap } from './weather-widget/weather-codes-map';
 
 export type UnitType = 'metric' | 'imperial';
+export type TimestepsType = 'best' | '1m' | '5m' | '15m' | '30m' | '1h' | '1d' | 'current';
 
-export interface GetWeatherOptions {
+export interface GetTimelinesOptions {
   location: string;
   units?: UnitType;
+  timesteps?: TimestepsType;
   timezone?: string;
+  startTime?: string;
+  endTime?: string;
 }
 
-export interface TomorrowApiOptions extends Required<GetWeatherOptions> {
-  timesteps: string;
+export interface TomorrowApiOptions extends Required<GetTimelinesOptions> {
   fields: string[];
-  startTime: string;
-  endTime: string;
 }
 
 export type WeatherCodeKey = keyof typeof WeatherCodesMap;

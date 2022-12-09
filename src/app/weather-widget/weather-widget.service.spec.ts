@@ -61,7 +61,7 @@ describe('WeatherWidgetService', () => {
     })
 
     it('Returns observable array of intervals', (done) => {
-      service.getWeather({ location: '' }).subscribe(res => {
+      service.getTimelines({ location: '' }).subscribe(res => {
         expect(res).toEqual(mockData.data.timelines[0].intervals);
         httpMock.verify();
         done();
@@ -78,7 +78,7 @@ describe('WeatherWidgetService', () => {
       it('uses cache when available', done => {
         service['_cache'] = mockData.data.timelines[0].intervals as WeatherContext[];
 
-        service.getWeather({ location: '' }).subscribe(res => {
+        service.getTimelines({ location: '' }).subscribe(res => {
           expect(res).toEqual(mockData.data.timelines[0].intervals);
           httpMock.verify();
           done();

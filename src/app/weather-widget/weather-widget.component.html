@@ -1,35 +1,41 @@
 <ng-template #widgetTemplate let-data="data">
-  <div #weatherWidget class="weather-widget" *ngIf="data">
-    <div class="weather-widget-current">
-      <div class="weather-widget-current-date">
-        {{data[current].startTime | date: 'MMMM d, y, h:mm a'}}
-      </div>
-      <div class="weather-widget-current-description">
-        {{data[current].description}}
-      </div>
+  <div #weatherWidget class="weather-widget" *ngIf="data && !data?.error">
+    <div class="weather-widget-current" *ngIf="data[current]">
       <div class="weather-widget-current-temperature">
+        <small class="weather-widget-current-date">
+          {{data[current].startTime | date: 'MMMM d, y, h:mm a'}}
+        </small>
+        <span>
+          {{data[current].values.temperature | number: '1.0-0'}} °
+        </span>
+      </div>
+      <div class="weather-widget-current-details">
         <img [src]="data[current].icon" />
-        <span *ngIf="units == 'metric'">
-          {{data[current].values.temperature | number: '1.0-0'}} °C
-        </span>
-        <span *ngIf="units == 'imperial'">
-          {{data[current].values.temperature | number: '1.0-0'}} °F
-        </span>
+        <span>{{data[current].description}}</span>
       </div>
     </div>
-    <div class="weather-widget-intervals">
-      <div class="weather-widget-intervals-item"
-        *ngFor="let item of data; let i = index;"
-        (click)="handleItemClick(i)"
-        [class.active]="current == i"
-        [style.width]="100 / sliderItems + '%'"
-        [style.minWidth]="100 / sliderItems + '%'">
-        <b>{{item.startTime | date: 'h a'}}</b>
-        <img [src]="item.icon" />
-        <span>{{item.description}}</span>
+    <div class="weather-widget-nav">
+      <div class="weather-widget-timesteps">
+        <span>The next 6 hours</span>
+      </div>
+    </div>
+    <div class="weather-widget-bottom">
+      <div class="weather-widget-intervals">
+        <div class="weather-widget-intervals-item" (click)="itemClick(0)" [class.active]="current == 0">
+          <b>Now</b>
+          <img [src]="data[0].icon" />
+          <span>{{data[0].values.temperature | number: '1.0-0'}} °</span>
+        </div>
+        <div class="weather-widget-intervals-item" *ngFor="let item of data.slice(1, 6); let i = index;"
+          (click)="itemClick(i + 1)" [class.active]="current == i + 1">
+          <b>{{item.startTime | date: 'h a'}}</b>
+          <img [src]="item.icon" />
+          <span>{{item.values.temperature | number: '1.0-0'}} °</span>
+        </div>
       </div>
     </div>
   </div>
 </ng-template>
 
-<ng-container *ngTemplateOutlet="widgetTemplate; context: { data: data$ | async }"></ng-container>
+<ng-container
+  *ngTemplateOutlet="widgetTemplate; context: { data: hours$ | async }"></ng-container>

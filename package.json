@@ -11,6 +11,7 @@
     "start:demo": "http-server demo",
     "build": "ng build",
     "build:demo": "ng build --configuration demo",
+    "build:concat": "cat demo/{polyfills,runtime,main}.js > ./demo/weather-widget.min.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
