@@ -24,25 +24,10 @@ describe('WeatherWidgetComponent', () => {
 
     fixture = TestBed.createComponent(WeatherWidgetComponent);
     component = fixture.componentInstance;
-    component.latitude = '53.219126515171546';
-    component.longitude = '6.5731477278820805';
-
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('throws an error when latitude or longitude are undefined', (done) => {
-    fixture = TestBed.createComponent(WeatherWidgetComponent);
-    component = fixture.componentInstance;
-
-    try {
-      fixture.detectChanges();
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error);
-      done();
-    }
   });
 });
