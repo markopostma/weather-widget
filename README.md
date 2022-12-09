@@ -34,7 +34,6 @@ And don't forget to embed the following scripts right before the closing `</body
 | longitude    |   Yes    |        `string`        |                    |
 | units        |    No    | `metric` or `imperial` | `metric`           |
 | timezone     |    No    |        `string`        | `Europe/Amsterdam` |
-| slider-items |    No    |        `number`        | `4`                |
 
 ## Development server
 
