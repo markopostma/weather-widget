@@ -44,3 +44,5 @@ Thumbs.db
 
 # Custom
 .vscode
+src/palette.svg
+design.sketch

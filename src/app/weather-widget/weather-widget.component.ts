@@ -26,8 +26,11 @@ export class WeatherWidgetComponent implements OnInit {
 
   @ViewChild('weatherWidget') weatherWidgetRef!: ElementRef<HTMLDivElement>;
 
+  // display of timeline intervals
   private _activeInterval = 0;
-  public hours$!: Observable<WeatherContext[] | unknown>;
+  public hours$!: Observable<WeatherContext[] | { error: HttpErrorResponse }>;
+
+  // pagination of hours
   public page = 0;
   public perPage = 6;
 
@@ -41,7 +44,7 @@ export class WeatherWidgetComponent implements OnInit {
         return intervals.map(createWeatherContext);
       }),
       catchError((error: HttpErrorResponse) => {
-        return of(error)
+        return of({ error })
       })
     );
   }

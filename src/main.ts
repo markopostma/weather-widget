@@ -6,6 +6,8 @@ import { TOMORROW_API_KEY, TOMORROW_API_KEY_PROVIDER } from "./app/constants";
 import { WeatherWidgetComponent } from "./app/weather-widget/weather-widget.component";
 import { WeatherWidgetService } from "./app/weather-widget/weather-widget.service";
 
+console.log(process.env);
+
 (async () => {
   const app = await createApplication({
     providers: [

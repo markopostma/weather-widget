@@ -17,6 +17,13 @@
   animation-delay: 0.5s;
   animation-fill-mode: backwards;
 
+  &-error {
+    border: 1px $error-color solid;
+    padding: 24px;
+    background: rgba($error-color, 0.1);
+    box-sizing: border-box;
+  }
+
   &-current {
     width: 100%;
     box-sizing: border-box;

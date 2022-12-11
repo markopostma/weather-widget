@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TOMORROW_API_KEY_PROVIDER, LOCAL_STORAGE_CACHE, TOMORROW_API_URL, DEFAULT_TIMEZONE, DEFAULT_UNIT } from '../constants';
 import { GetTimelinesOptions, TimelineInterval, TimelinesResponse, TomorrowApiOptions, WeatherContext } from '../types';
 import { catchError, map, Observable, of, tap } from 'rxjs';
@@ -82,15 +82,20 @@ export class WeatherWidgetService {
     return this.http
       .get<TimelinesResponse>(`${TOMORROW_API_URL}/timelines`, { params, headers })
       .pipe(
-        map(response => response
-          .data
-          .timelines[0]
-          .intervals
+        catchError((error) => of(error)),
+        map(response => {
+          if ('error' in response) {
+            throw response;
+          }
+          return response
+            .data
+            .timelines[0]
+            .intervals
+        }
         ),
         tap(intervals => {
           localStorage.setItem(LOCAL_STORAGE_CACHE, JSON.stringify(intervals, undefined, 0));
         }),
-        catchError(error => of(error))
       );
   }
 }

@@ -21,9 +21,7 @@ And don't forget to embed the following scripts right before the closing `</body
 
 ``` html
 <!-- Scripts -->
-<script src="runtime.js" type="module"></script>
-<script src="polyfills.js" type="module"></script>
-<script src="main.js" type="module"></script>
+<script src="weather-widget.min.js" type="module"></script>
 ```
 
 ## Attributes

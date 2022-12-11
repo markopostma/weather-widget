@@ -1,39 +1,44 @@
 <ng-template #widgetTemplate let-data="data">
-  <div #weatherWidget class="weather-widget" *ngIf="data && !data?.error">
-    <div class="weather-widget-current" *ngIf="data[current]">
-      <div class="weather-widget-current-temperature">
-        <small class="weather-widget-current-date">
-          {{data[current].startTime | date: 'MMMM d, y, h:mm a'}}
-        </small>
-        <span>
-          {{data[current].values.temperature | number: '1.0-0'}} °
-        </span>
-      </div>
-      <div class="weather-widget-current-details">
-        <img [src]="data[current].icon" />
-        <span>{{data[current].description}}</span>
-      </div>
+  <div #weatherWidget class="weather-widget" *ngIf="data">
+    <div *ngIf="data.error" class="weather-widget-error">
+      <b>Error {{data.error.status}} {{data.error.error.type}}</b>
+      <p>{{data.error.message}}</p>
     </div>
-    <div class="weather-widget-nav">
-      <div class="weather-widget-nav-pagination">
-        <a [class.disabled]="page == 0" (click)="paginate(page - 1)">&lt;</a>
-        <span>Hours</span>
-        <a [class.disabled]="page == 3" (click)="paginate(page + 1)">&gt;</a>
-      </div>
-    </div>
-    <div class="weather-widget-bottom">
-      <div class="weather-widget-intervals">
-        <div class="weather-widget-intervals-item" *ngFor="let item of data.slice(page * perPage, page * perPage + perPage); let i = index;"
-          (click)="itemClick(data.indexOf(item))"
-          [class.active]="current == data.indexOf(item)">
-          <b>{{item.startTime | date: 'h a'}}</b>
-          <img [src]="item.icon" />
-          <span>{{item.values.temperature | number: '1.0-0'}} °</span>
+    <ng-template [ngIf]="!data.error">
+      <div class="weather-widget-current" *ngIf="data[current]">
+        <div class="weather-widget-current-temperature">
+          <small class="weather-widget-current-date">
+            {{data[current].startTime | date: 'MMMM d, y, h:mm a'}}
+          </small>
+          <span>
+            {{data[current].values.temperature | number: '1.0-0'}} °
+          </span>
+        </div>
+        <div class="weather-widget-current-details">
+          <img [src]="data[current].icon" />
+          <span>{{data[current].description}}</span>
         </div>
       </div>
-    </div>
+      <div class="weather-widget-nav">
+        <div class="weather-widget-nav-pagination">
+          <a [class.disabled]="page == 0" (click)="paginate(page - 1)">&lt;</a>
+          <span>Hours</span>
+          <a [class.disabled]="page == 3" (click)="paginate(page + 1)">&gt;</a>
+        </div>
+      </div>
+      <div class="weather-widget-bottom">
+        <div class="weather-widget-intervals">
+          <div class="weather-widget-intervals-item"
+            *ngFor="let item of data.slice(page * perPage, page * perPage + perPage); let i = index;"
+            (click)="itemClick(data.indexOf(item))" [class.active]="current == data.indexOf(item)">
+            <b>{{item.startTime | date: 'h a'}}</b>
+            <img [src]="item.icon" />
+            <span>{{item.values.temperature | number: '1.0-0'}} °</span>
+          </div>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </ng-template>
 
-<ng-container
-  *ngTemplateOutlet="widgetTemplate; context: { data: hours$ | async }"></ng-container>
+<ng-container *ngTemplateOutlet="widgetTemplate; context: { data: hours$ | async }"></ng-container>
