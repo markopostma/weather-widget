@@ -1,7 +1,7 @@
 <ng-template #widgetTemplate let-data="data">
-  <div #weatherWidget class="weather-widget" *ngIf="data">
+  <div class="weather-widget" *ngIf="data">
     <div *ngIf="data.error" class="weather-widget-error">
-      <b>Error {{data.error.status}} {{data.error.error.type}}</b>
+      <b>Error {{data.error?.status}} {{data.error?.error?.type}}</b>
       <p>{{data.error.message}}</p>
     </div>
     <ng-template [ngIf]="!data.error">
@@ -30,7 +30,8 @@
         <div class="weather-widget-intervals">
           <div class="weather-widget-intervals-item"
             *ngFor="let item of data.slice(page * perPage, page * perPage + perPage); let i = index;"
-            (click)="itemClick(data.indexOf(item))" [class.active]="current == data.indexOf(item)">
+            (click)="itemClick(data.indexOf(item))"
+            [class.active]="current == data.indexOf(item)">
             <b>{{item.startTime | date: 'h a'}}</b>
             <img [src]="item.icon" />
             <span>{{item.values.temperature | number: '1.0-0'}} °</span>

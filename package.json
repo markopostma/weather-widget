@@ -10,8 +10,8 @@
     "start": "ng serve",
     "start:demo": "http-server demo",
     "build": "ng build",
-    "build:demo": "ng build --configuration demo",
-    "build:concat": "cat demo/{polyfills,runtime,main}.js > ./demo/weather-widget.min.js",
+    "build:concat": "cat dist/weather-widget/{polyfills,runtime,main}.js > ./dist/weather-widget.min.js",
+    "postbuild": "npm run build:concat",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -31,7 +31,6 @@
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "^14.1.0",
     "@angular-devkit/build-angular": "^15.0.3",
     "@angular/cli": "~15.0.3",
     "@angular/compiler-cli": "^15.0.3",

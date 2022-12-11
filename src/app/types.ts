@@ -10,11 +10,10 @@ export interface GetTimelinesOptions {
   timezone?: string;
   startTime?: string;
   endTime?: string;
+  fields?: string;
 }
 
-export interface TomorrowApiOptions extends Required<GetTimelinesOptions> {
-  fields: string[];
-}
+export type TomorrowApiOptions = Required<GetTimelinesOptions>;
 
 export type WeatherCodeKey = keyof typeof WeatherCodesMap;
 

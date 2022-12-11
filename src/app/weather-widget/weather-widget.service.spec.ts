@@ -1,14 +1,24 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { LOCAL_STORAGE_CACHE, TOMORROW_API_KEY_PROVIDER, TOMORROW_API_URL } from '../constants';
-import { TimelinesResponse, WeatherContext } from '../types';
+import { TOMORROW_API_KEY_PROVIDER, TOMORROW_API_URL } from '../constants';
+import { GetTimelinesOptions, TimelinesResponse, WeatherContext } from '../types';
 import { WeatherWidgetService } from './weather-widget.service';
 
 describe('WeatherWidgetService', () => {
   let service: WeatherWidgetService;
   let httpMock: HttpTestingController;
 
+  const timelineOptions: Required<GetTimelinesOptions> = {
+    location: 'TEST location',
+    timezone: 'TEST timezone',
+    units: 'TEST units' as any,
+    timesteps: 'TEST timesteps' as any,
+    endTime: 'TEST endTime',
+    startTime: 'TEST startTime',
+    fields: ['field_1', 'field_2'].join(' '),
+  };
+  const testApiKey = (Math.random() * 100000).toString();
   const mockData: TimelinesResponse = {
     data: {
       timelines: [
@@ -39,7 +49,7 @@ describe('WeatherWidgetService', () => {
       providers: [
         {
           provide: TOMORROW_API_KEY_PROVIDER,
-          useValue: "TEST_API_KEY",
+          useValue: testApiKey,
         },
       ]
     });
@@ -52,17 +62,16 @@ describe('WeatherWidgetService', () => {
   });
 
   describe('getWeather()', () => {
-    beforeAll(() => {
-      localStorage.removeItem(LOCAL_STORAGE_CACHE);
-    });
-
     afterEach(() => {
-      localStorage.removeItem(LOCAL_STORAGE_CACHE);
+      service['clearCache']();
     })
 
-    it('Returns observable array of intervals', (done) => {
+    it('Returns observable array of intervals and caches result', (done) => {
+      const localStorageSpy = spyOn(localStorage, 'setItem');
+
       service.getTimelines({ location: '' }).subscribe(res => {
         expect(res).toEqual(mockData.data.timelines[0].intervals);
+        expect(localStorageSpy).toHaveBeenCalled();
         httpMock.verify();
         done();
       });
@@ -70,13 +79,33 @@ describe('WeatherWidgetService', () => {
       httpMock.expectOne(({ url }) => url === `${TOMORROW_API_URL}/timelines`).flush(mockData);
     });
 
+    it('Passes the correct parameters and headers', (done) => {
+      service.getTimelines(timelineOptions).subscribe(() => {
+        httpMock.verify();
+        done();
+      });
+
+      let req = httpMock.expectOne(({ url }) => url === `${TOMORROW_API_URL}/timelines`);
+      const { params, headers } = req.request;
+
+      req.flush(mockData);
+
+      expect(params.get('location')).toEqual(timelineOptions.location);
+      expect(params.get('timezone')).toEqual(timelineOptions.timezone);
+      expect(params.get('units')).toEqual(timelineOptions.units);
+      expect(params.get('timesteps')).toEqual(timelineOptions.timesteps);
+      expect(params.get('endTime')).toEqual(timelineOptions.endTime);
+      expect(params.get('startTime')).toEqual(timelineOptions.startTime);
+      expect(headers.get('apikey')).toEqual(testApiKey);
+    });
+
     describe('caching', () => {
       afterAll(() => {
-        delete service['_cache'];
+        service['clearCache']();
       });
 
       it('uses cache when available', done => {
-        service['_cache'] = mockData.data.timelines[0].intervals as WeatherContext[];
+        service['setCache'](mockData.data.timelines[0].intervals as WeatherContext[]);
 
         service.getTimelines({ location: '' }).subscribe(res => {
           expect(res).toEqual(mockData.data.timelines[0].intervals);
@@ -84,7 +113,7 @@ describe('WeatherWidgetService', () => {
           done();
         });
 
-        httpMock.expectNone(({ url }) => url.includes(`${TOMORROW_API_URL}/timelines`));
+        httpMock.expectNone(({ url }) => url === `${TOMORROW_API_URL}/timelines`);
       });
     })
   });

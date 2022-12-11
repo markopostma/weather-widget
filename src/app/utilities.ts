@@ -1,8 +1,9 @@
 
-import { TimelineInterval } from './types';
+import { TimelineInterval, WeatherContext } from './types';
 import { WeatherCodesMap, WeatherIconsMap } from './weather-widget/weather-codes-map';
 
-export function createWeatherContext(interval: TimelineInterval) {
+/** Adds human readable description and icon */
+export function mapWeatherContext(interval: TimelineInterval): WeatherContext {
   const description = WeatherCodesMap[interval.values.weatherCode];
   const iconName = WeatherIconsMap[interval.values.weatherCode as keyof typeof WeatherIconsMap];
 

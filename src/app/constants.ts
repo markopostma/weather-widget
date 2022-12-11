@@ -1,9 +1,16 @@
 import { InjectionToken } from '@angular/core';
-import { UnitType } from './types';
+import { TomorrowApiOptions } from './types';
 
 export const TOMORROW_API_KEY_PROVIDER = new InjectionToken<string>('TOMORROW_API_KEY');
-export const TOMORROW_API_KEY = '5bUljBzwJmDKrExlqPUpBUZlc3cr36LH';
 export const TOMORROW_API_URL = 'https://api.tomorrow.io/v4';
-export const LOCAL_STORAGE_CACHE = 'WEATHER_WIDGET_CACHE';
-export const DEFAULT_UNIT: UnitType = 'metric';
-export const DEFAULT_TIMEZONE = 'Europe/Amsterdam';
+export const WEATHER_WIDGET_CACHE = 'WEATHER_WIDGET_CACHE';
+export const DEFAULT_WEATHER_OPTIONS = {
+  units: 'metric',
+  timezone: 'Europe/Amsterdam',
+  startTime: 'now',
+  timesteps: '1h',
+  fields: [
+    'temperature',
+    'weatherCode',
+  ].join(',')
+} as TomorrowApiOptions;

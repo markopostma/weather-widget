@@ -30,4 +30,12 @@ describe('WeatherWidgetComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('has default values', () => {
+    expect(component.current).toEqual(0);
+    expect(component.page).toEqual(0);
+    expect(component.perPage).toEqual(6);
+    expect(component.units).toEqual('metric');
+    expect(component.timezone).toEqual('Europe/Amsterdam');
+  });
 });

@@ -12,6 +12,7 @@ Embed the following HTML code in your website:
 <weather-widget
   latitude=""
   longitude=""
+  api-key=""
   units=""
   timezone="">
 </weather-widget>
@@ -26,12 +27,13 @@ And don't forget to embed the following scripts right before the closing `</body
 
 ## Attributes
 
-| Name         | Required |          type          | Default            |
-| ------------ | :------: | :--------------------: | ------------------ |
-| latitude     |   Yes    |        `string`        |                    |
-| longitude    |   Yes    |        `string`        |                    |
-| units        |    No    | `metric` or `imperial` | `metric`           |
-| timezone     |    No    |        `string`        | `Europe/Amsterdam` |
+| Name      | Required |          type          | Default            |
+| --------- | :------: | :--------------------: | ------------------ |
+| latitude  |   Yes    |        `string`        |                    |
+| longitude |   Yes    |        `string`        |                    |
+| api-key   |   Yes    |        `string`        |                    |
+| units     |    No    | `metric` or `imperial` | `metric`           |
+| timezone  |    No    |        `string`        | `Europe/Amsterdam` |
 
 ## Development server
 
